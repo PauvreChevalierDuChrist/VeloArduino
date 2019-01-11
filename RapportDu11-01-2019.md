@@ -25,11 +25,11 @@ On peut maintenant, dans nos programmes rajouter les lignes suivantes pour que n
 
 J'ai ensuite rapidement aidé Enzo à faire des choix concernants la structure du vélo. Nous avons décidé de la réaliser avec des pièces Mecano étant données qu'elles sont bien plus "maléables" que des LEGO. Voilà ce que nous avons pour le moment : 
 
-![alt text](http://www.noelshack.com/2019-02-5-1547245816-roue.jpg "C'est beau.")
+![alt text](http://image.noelshack.com/fichiers/2019/02/5/1547245816-roue.jpg "C'est beau.")
 
 Voici à quoi ressemble mon montage pour l'instant : 
 
-![alt text](http://www.noelshack.com/2019-02-5-1547245821-montage.jpg "C'est beau.")
+![alt text](http://image.noelshack.com/fichiers/2019/02/5/1547245821-montage.jpg "C'est beau.")
 
 J'ai trouvé sur internet un exemple de PID : https://www.instructables.com/id/Inverted-Pendulum-Robot-Using-a-Reaction-Wheel/). 
 
