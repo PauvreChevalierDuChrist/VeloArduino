@@ -31,7 +31,9 @@ Voici à quoi ressemble mon montage pour l'instant :
 
 ![alt text](http://www.noelshack.com/2019-02-5-1547245821-montage.jpg "C'est beau.")
 
-J'ai trouvé sur internet un exemple de PID (https://www.instructables.com/id/Inverted-Pendulum-Robot-Using-a-Reaction-Wheel/). J'ai addapté le code donné à ce que nous avions (l'auteur utilisait des servomoteurs, pas nous.). Mais je ne peux pour l'instant pas vraiment savoir si le programme est foncitonnel (on ne peut pas encore savoir s'il permet d'équilibrer le vélo). En tout cas, le moteur réagit en fonction des mouvements du gyroscope, c'est bon signe.
+J'ai trouvé sur internet un exemple de PID : https://www.instructables.com/id/Inverted-Pendulum-Robot-Using-a-Reaction-Wheel/). 
+
+J'ai addapté le code donné à ce que nous avions (l'auteur utilisait des servomoteurs, pas nous.). Mais je ne peux pour l'instant pas vraiment savoir si le programme est foncitonnel (on ne peut pas encore savoir s'il permet d'équilibrer le vélo). En tout cas, le moteur réagit en fonction des mouvements du gyroscope, c'est bon signe.
 
 Merci de m'avoir lu.
 
