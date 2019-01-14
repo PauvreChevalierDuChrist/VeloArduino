@@ -1,4 +1,4 @@
-# Rapport du 14 décembre 2018 :
+# Rapport du 14 décembre 2018 : Sacha PSALMON
 
 La scéance dernière nous avons réalisé quelques calculs et résolu un bon nombre de problèmes relevant de la mécanique. Le but était de comprendre pourquoi est ce que faire tourner une roue accrochée à un vélo (verticalement) permettait de l'équilibrer. C'est au final dû à la force dirrectement induite par le moment de rotation de la roue, nous détaillerons cela dans des schémas ultérieurs. 
 

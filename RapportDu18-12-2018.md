@@ -1,4 +1,4 @@
-# Rapport du 18 décembre 2018 :
+# Rapport du 18 décembre 2018 : Sacha PSALMON
 
 Aujourd'hui nous avons fini de trouver le matériel à commander. Nous sommes normalement au point à ce niveau là. Enzo a proposé l'idée d'utiliser des briques LEGO pour faire la structure du vélo, ça serait plus simple et plus léger en effet que de la faire en bois et bien moins chronophage que de l'imprimer en 3D.
 

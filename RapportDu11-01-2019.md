@@ -1,4 +1,4 @@
-# Rapport du 11 janvier 2019 :
+# Rapport du 11 janvier 2019 : Sacha PSALMON
 
 Aujourd'hui je me suis principalement concentré sur la mise en place du gyroscope. J'ai d'abord soudé un petit truc permettant de le relier à l'arduino (un ensemble de prises femelles), première soudure de ma vie au passage. Le problème des caractères spéciaux incompréhensibles était bien lié à une différence de vitesse de communication entre le progremme arduino et le moniteur série. Problème qui fut vite réglé. 
 
