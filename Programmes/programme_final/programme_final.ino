@@ -9,34 +9,32 @@ MPU6050 accelgyro;
 char Data;
 int vitesseB;
 SoftwareSerial BlueT(RX,TX);
-int ENA=3; //Connecté à Arduino pin 9(sortie PWM)
-int IN1=4; //Connecté à Arduino pin 4
-int IN2=5; //Connecté à Arduino pin 5
-//-- MOTEUR B --
-int ENB=9; //Connecté à Arduino pin 10(Sortie PWM)
-int IN3=6; //Connecté à Arduino pin 6
-int IN4=7; //Connecté à Arduino pin 7
+//--MOTEUR A -- ROUE INERTIE
+int ENA=3; 
+int IN1=4; 
+int IN2=5; 
+//-- MOTEUR B -- ROUE ARRIERE
+int ENB=9; 
+int IN3=6; 
+int IN4=7; 
 
 int value;
 int value2 = 0;
-// set values you need to zero
 
-int sensVal;           // for raw sensor values 
-float filterVal = 0.001;       // this determines smoothness  - .0001 is max  1 is off (no smoothing)
-float smoothedVal;     // this holds the last loop value just use a unique variable for every different sensor that needs smoothing
 
-float smoothedVal2;   // this would be the buffer value for another sensor if you needed to smooth two different sensors - not used in this sketch
-
+int sensVal;           
+float filterVal = 0.001;       
+float smoothedVal;    
 
 int i, j;  
-const int MPU=0x68;  // I2C address of the MPU-6050
+const int MPU=0x68;  
 int16_t AcX,AcY,AcZ,Tmp,GyX,GyY,GyZ;
 const int numReadings = 10;
 
-int readings[numReadings];      // the readings from the analog input
-int index = 0;                  // the index of the current reading
-int total = 0;                  // the running total
-int average = 0;                // the average
+int readings[numReadings];      
+int index = 0;                  
+int total = 0;                  
+int average = 0;                
 
 int goal = 300;
 double Input;
@@ -46,25 +44,22 @@ int Kp = 0;
 int Ki = 0;
 int Kd = 27;
 PID balancePID(&Input,&Output,&Setpoint,Kp,Ki,Kd,DIRECT);  
-int neutral = 127;
-int fullForward = 255;
-int fullReverse = 0;
 
 void setup(){
   Wire.begin();
   Wire.beginTransmission(MPU);
-  Wire.write(0x6B);  // PWR_MGMT_1 register
-  Wire.write(0);     // set to zero (wakes up the MPU-6050)
+  Wire.write(0x6B);  
+  Wire.write(0);     
   Wire.endTransmission(true);
   balancePID.SetMode(AUTOMATIC);
   balancePID.SetOutputLimits(0,255);
   Serial.begin(115200);   
   BlueT.begin(9600);      
-  // initialize all the readings to 0:
 
-  pinMode(ENA,OUTPUT); // Configurer
-pinMode(ENB,OUTPUT); // les broches
-pinMode(IN1,OUTPUT); // comme sortie
+  pinMode(ENA,OUTPUT);
+pinMode(ENB,OUTPUT); 
+
+pinMode(IN1,OUTPUT); 
 pinMode(IN2,OUTPUT);
 pinMode(IN3,OUTPUT);
 pinMode(IN4,OUTPUT);
@@ -85,19 +80,7 @@ accelgyro.setXAccelOffset(-630);
 }
 void loop(){
   Input = abs(smooth(readGyro(),filterVal,smoothedVal));
-  if(Input < 0){
-    balancePID.SetControllerDirection(REVERSE);
-  }
-  else{
-    balancePID.SetControllerDirection(DIRECT);
-  }
-  if(Input > 15000){
-    balancePID.SetControllerDirection(REVERSE);
- }
-  if(Input < 15000){
-   balancePID.SetControllerDirection(DIRECT);
-  }
-  //Serial.print("Average Value (X): ");Serial.println(Input);
+  
   balancePID.Compute();
   if(abs(Input) > 7500){
     value = (Output*5.3);
@@ -107,7 +90,6 @@ void loop(){
     value = (Output*5.3)+1249;
       motorSpeed(value);
   }
-  //Serial.println(value);
 Data=BlueT.read();
 if (Data=='B'){
     int vitessetempB=BlueT.parseInt();
@@ -141,33 +123,24 @@ int averageValue(int GyX){
       index = 0;                          
     }
     average = total / numReadings;  
-    //Serial.print("Average Value (X): ");Serial.println(average); 
+    Serial.print("Average Value (X): ");Serial.println(average); 
    return average;   
 }
 
 int readGyro(){
   Wire.beginTransmission(MPU);
-  Wire.write(0x3B);  // starting with register 0x3B (ACCEL_XOUT_H)
+  Wire.write(0x3B); 
   Wire.endTransmission(false);
-  Wire.requestFrom(MPU,14,true);  // request a total of 14 registers
+  Wire.requestFrom(MPU,14,true);  
   
-  AcX=Wire.read()<<8|Wire.read();  // 0x3B (ACCEL_XOUT_H) & 0x3C (ACCEL_XOUT_L)     
-  AcY=Wire.read()<<8|Wire.read();  // 0x3D (ACCEL_YOUT_H) & 0x3E (ACCEL_YOUT_L)
-  AcZ=Wire.read()<<8|Wire.read();  // 0x3F (ACCEL_ZOUT_H) & 0x40 (ACCEL_ZOUT_L)
-  Tmp=Wire.read()<<8|Wire.read();  // 0x41 (TEMP_OUT_H) & 0x42 (TEMP_OUT_L)
-  GyX=Wire.read()<<8|Wire.read();  // 0x43 (GYRO_XOUT_H) & 0x44 (GYRO_XOUT_L)
-  GyY=Wire.read()<<8|Wire.read();  // 0x45 (GYRO_YOUT_H) & 0x46 (GYRO_YOUT_L)
-  GyZ=Wire.read()<<8|Wire.read();  // 0x47 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
+  AcX=Wire.read()<<8|Wire.read();      
+  AcY=Wire.read()<<8|Wire.read();  
+  AcZ=Wire.read()<<8|Wire.read();  
+  Tmp=Wire.read()<<8|Wire.read();  
+  GyX=Wire.read()<<8|Wire.read();  
+  GyY=Wire.read()<<8|Wire.read();  
+  GyZ=Wire.read()<<8|Wire.read();  
   
-//  Serial.print("AcX = "); Serial.print(AcX);
-//  Serial.print(" | AcY = "); Serial.print(AcY);
-//  Serial.print(" | AcZ = "); Serial.print(AcZ);
-//  Serial.print(" | Tmp = "); Serial.print(Tmp/340.00+36.53);  //equation for temperature in degrees C from datasheet
-//  Serial.println(" | GyX = "); Serial.print(GyX);
-//  Serial.print(" | GyY = "); Serial.print(GyY);
-//  Serial.print(" | GyZ = "); Serial.println(GyZ);
-  
-  //delay(333);
   if(AcY < 0){
     return ((AcX^2)+(AcY^2))^(1/2);
   }
@@ -179,7 +152,7 @@ int readGyro(){
 int smooth(int data, float filterVal, float smoothedVal){
 
 
-  if (filterVal > 1){      // check to make sure param's are within range
+  if (filterVal > 1){
     filterVal = .99;
   }
   else if (filterVal <= 0){
