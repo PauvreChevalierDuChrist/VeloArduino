@@ -39,10 +39,10 @@ int average = 0;
 int goal = 300;
 double Input;
 double Output;
-double Setpoint = 14000;
-int Kp = 0;
-int Ki = 0;
-int Kd = 27;
+double Setpoint = 0;
+int Kp = 0.1;
+int Ki = 0.1;
+int Kd = 5;
 PID balancePID(&Input,&Output,&Setpoint,Kp,Ki,Kd,DIRECT);  
 
 void setup(){
@@ -79,15 +79,22 @@ accelgyro.setXAccelOffset(-630);
   
 }
 void loop(){
-  Input = abs(smooth(readGyro(),filterVal,smoothedVal));
+  Input = smooth(readGyro(),filterVal,smoothedVal);
   
   balancePID.Compute();
-  if(abs(Input) > 7500){
-    value = (Output*5.3);
+  
+  if(Input < 0){
+    digitalWrite(IN1,LOW);
+    digitalWrite(IN2,HIGH);
+    //Serial.println(-(Output));
+    value = (Output);
       motorSpeed(value);
   }
-  if(abs(Input) < 7500){
-    value = (Output*5.3)+1249;
+  if(Input > 0){
+    digitalWrite(IN1,HIGH);
+    digitalWrite(IN2,LOW);
+    //Serial.println(Output);
+    value = (Output);
       motorSpeed(value);
   }
 Data=BlueT.read();
@@ -95,6 +102,7 @@ if (Data=='B'){
     int vitessetempB=BlueT.parseInt();
     Serial.println(BlueT.parseInt());
     vitesseB=abs(BlueT.parseInt());
+    Serial.println(vitesseB);
   analogWrite(ENB,vitesseB);
 
   if(vitessetempB<0){
@@ -123,9 +131,12 @@ int averageValue(int GyX){
       index = 0;                          
     }
     average = total / numReadings;  
-    Serial.print("Average Value (X): ");Serial.println(average); 
    return average;   
 }
+
+
+
+
 
 int readGyro(){
   Wire.beginTransmission(MPU);
@@ -139,13 +150,14 @@ int readGyro(){
   Tmp=Wire.read()<<8|Wire.read();  
   GyX=Wire.read()<<8|Wire.read();  
   GyY=Wire.read()<<8|Wire.read();  
-  GyZ=Wire.read()<<8|Wire.read();  
+  GyZ=Wire.read()<<8|Wire.read();
+  
   
   if(AcY < 0){
-    return ((AcX^2)+(AcY^2))^(1/2);
+    return ((AcY^2))^(1/2);
   }
   if(AcY > 0){
-    return -((AcX^2)+(AcY^2))^(1/2);
+    return (AcY^2)^(1/2);
   }
 }
 
