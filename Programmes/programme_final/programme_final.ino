@@ -40,9 +40,9 @@ int goal = 300;
 double Input;
 double Output;
 double Setpoint = 0;
-int Kp = 0.1;
+int Kp = 10;
 int Ki = 0.1;
-int Kd = 5;
+int Kd = 0.5;
 PID balancePID(&Input,&Output,&Setpoint,Kp,Ki,Kd,DIRECT);  
 
 void setup(){
@@ -52,7 +52,7 @@ void setup(){
   Wire.write(0);     
   Wire.endTransmission(true);
   balancePID.SetMode(AUTOMATIC);
-  balancePID.SetOutputLimits(0,255);
+  balancePID.SetOutputLimits(-255,255);
   Serial.begin(115200);   
   BlueT.begin(9600);      
 
@@ -65,10 +65,10 @@ pinMode(IN3,OUTPUT);
 pinMode(IN4,OUTPUT);
 
 
-digitalWrite(IN3,LOW);
-digitalWrite(IN4,HIGH);
-digitalWrite(IN1,LOW);
-digitalWrite(IN2,HIGH);
+//digitalWrite(IN3,LOW);
+//digitalWrite(IN4,HIGH);
+//digitalWrite(IN1,LOW);
+//digitalWrite(IN2,HIGH);
 
 accelgyro.setXAccelOffset(-630);
   accelgyro.setYAccelOffset(-1125);
@@ -82,19 +82,20 @@ void loop(){
   Input = smooth(readGyro(),filterVal,smoothedVal);
   
   balancePID.Compute();
-  
-  if(Input < 0){
+  //Serial.println(Input);
+  if(Output < 0){
     digitalWrite(IN1,LOW);
     digitalWrite(IN2,HIGH);
-    //Serial.println(-(Output));
-    value = (Output);
+    Serial.println((Output));
+    value = abs((Output));
       motorSpeed(value);
   }
-  if(Input > 0){
+  if(Output > 0){
     digitalWrite(IN1,HIGH);
     digitalWrite(IN2,LOW);
-    //Serial.println(Output);
-    value = (Output);
+    
+    value = (abs((Output)));
+    Serial.println(value);
       motorSpeed(value);
   }
 Data=BlueT.read();
@@ -152,12 +153,12 @@ int readGyro(){
   GyY=Wire.read()<<8|Wire.read();  
   GyZ=Wire.read()<<8|Wire.read();
   
-  
+  //Serial.println(AcY);
   if(AcY < 0){
-    return ((AcY^2))^(1/2);
+    return AcY;
   }
   if(AcY > 0){
-    return (AcY^2)^(1/2);
+    return AcY;
   }
 }
 
